@@ -8,8 +8,35 @@
 import Cocoa
 import WebKit
 
-class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLSessionDelegate {
-   
+class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLSessionDelegate, WKDownloadDelegate {
+    func download(_ download: WKDownload, decideDestinationUsing response: URLResponse, suggestedFilename: String, completionHandler: @escaping (URL?) -> Void) {
+        let url = response.url
+        DownlondFromUrl(sendDown: url!, fileName: suggestedFilename)
+    }
+    func webView(_ webView: WKWebView, navigationAction: WKNavigationAction, didBecome download: WKDownload) {
+        download.delegate = self
+    }
+        
+    func webView(_ webView: WKWebView, navigationResponse: WKNavigationResponse, didBecome download: WKDownload) {
+        download.delegate = self
+    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
+        if navigationAction.shouldPerformDownload {
+            decisionHandler(.download, preferences)
+        } else {
+            decisionHandler(.allow, preferences)
+        }
+    }
+
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        if navigationResponse.canShowMIMEType {
+            decisionHandler(.allow)
+        } else {
+            decisionHandler(.download)
+        }
+    }
     
     
 //  --- //
@@ -23,7 +50,6 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let contentController = WKUserContentController();
         let webConfiguration = WKWebViewConfiguration()
         webConfiguration.websiteDataStore = WKWebsiteDataStore.default()
 
@@ -49,8 +75,6 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
         
     }
     
-
-    
     
 // control target blank link
     public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
@@ -59,23 +83,6 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
         }
         return nil
     }
-    
-// handler file dowloading
-//    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-//        print("!!!!!!___mimeType___!!!!!!!")
-//        print(navigationAction)
-//        decisionHandler(.allow)
-//    }
-  
-    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!){
-        print("!!!!!!___navigation___!!!!!!!")
-        print(navigation as Any)
-    }
-    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error){
-        print("!!!!!!___navigation!error___!!!!!!!")
-        print(navigation as Any)
-    }
-
     
 //   for open upload files
     func webView(_ webView: WKWebView, runOpenPanelWith parameters: WKOpenPanelParameters, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping ([URL]?) -> Void) {
@@ -91,41 +98,19 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
             }
         }
     }
-    
-
 
    /*
     Download the file from the given url and store it locally in the app's temp folder.
     */
-//    DownlondFromUrl(sendDown: navigationAction.request.url!)
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-       if let url = navigationAction.request.url {
 
-           print("fileDownload: check ::  \(url)")
-
-           let extention = "\(url)".suffix(4)
-
-           if extention == ".pdf" ||  extention == ".csv"{
-               print("fileDownload: redirect to download events. \(extention)")
-               DispatchQueue.main.async {
-                   self.DownlondFromUrl(sendDown: url)
-               }
-               decisionHandler(.cancel)
-               return
-           }
-
-       }
-
-       decisionHandler(.allow)
-   }
-
-    func DownlondFromUrl(sendDown:URL){
+    func DownlondFromUrl(sendDown:URL, fileName:String){
         let fileURL = sendDown
         let documentsUrl:URL =  (FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first as URL?)!
-        let destinationFileUrl = documentsUrl.appendingPathComponent(fileURL.lastPathComponent)
+        let destinationFileUrl = documentsUrl.appendingPathComponent(fileName)
+            print("!!!__destinationFileUrl___!!!")
             print(destinationFileUrl)
-        
-        let sessionConfig = URLSessionConfiguration.default
+
+//        let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
         let request = URLRequest(url:fileURL)
 
@@ -159,7 +144,6 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
                     switch result {
                     case .success(_):
                             print("OK Run")
-                                    
                     case .failure(let error):
                         print(error.localizedDescription)
                     }
@@ -169,7 +153,6 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
                     case .success(let response):
                             print("OK Run")
                             print(response)
-                                    
                     case .failure(let error):
                         print(error.localizedDescription)
                     }
