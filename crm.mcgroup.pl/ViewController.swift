@@ -121,8 +121,12 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
 
                 do {
                     try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl)
-                } catch (let writeError) {
-                    print("Error creating a file \(destinationFileUrl) : \(writeError)")
+                } catch (_) {
+                    let random = Int(arc4random_uniform(11) + 1)
+                    let newName = "\(random)_\(fileName)"
+                    self.DownlondFromUrl(sendDown: fileURL, fileName: newName)
+                    
+                    print("Error creating a file \(destinationFileUrl) :")
                 }
 
             } else {
