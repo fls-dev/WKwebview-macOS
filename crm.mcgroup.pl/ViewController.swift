@@ -9,37 +9,6 @@ import Cocoa
 import WebKit
 
 class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLSessionDelegate, WKDownloadDelegate {
-    func download(_ download: WKDownload, decideDestinationUsing response: URLResponse, suggestedFilename: String, completionHandler: @escaping (URL?) -> Void) {
-        let url = response.url
-        DownlondFromUrl(sendDown: url!, fileName: suggestedFilename)
-    }
-    func webView(_ webView: WKWebView, navigationAction: WKNavigationAction, didBecome download: WKDownload) {
-        download.delegate = self
-    }
-        
-    func webView(_ webView: WKWebView, navigationResponse: WKNavigationResponse, didBecome download: WKDownload) {
-        download.delegate = self
-    }
-    
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
-        if navigationAction.shouldPerformDownload {
-            decisionHandler(.download, preferences)
-        } else {
-            decisionHandler(.allow, preferences)
-        }
-    }
-
-    
-    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-        if navigationResponse.canShowMIMEType {
-            decisionHandler(.allow)
-        } else {
-            decisionHandler(.download)
-        }
-    }
-    
-    
-//  --- //
       
     var webView: WKWebView!
     var myURL: URL!
@@ -103,14 +72,43 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
     Download the file from the given url and store it locally in the app's temp folder.
     */
 
+//    check downloading file
+    func download(_ download: WKDownload, decideDestinationUsing response: URLResponse, suggestedFilename: String, completionHandler: @escaping (URL?) -> Void) {
+        let url = response.url
+        DownlondFromUrl(sendDown: url!, fileName: suggestedFilename)
+    }
+    func webView(_ webView: WKWebView, navigationAction: WKNavigationAction, didBecome download: WKDownload) {
+        download.delegate = self
+    }
+        
+    func webView(_ webView: WKWebView, navigationResponse: WKNavigationResponse, didBecome download: WKDownload) {
+        download.delegate = self
+    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
+        if navigationAction.shouldPerformDownload {
+            decisionHandler(.download, preferences)
+        } else {
+            decisionHandler(.allow, preferences)
+        }
+    }
+
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        if navigationResponse.canShowMIMEType {
+            decisionHandler(.allow)
+        } else {
+            decisionHandler(.download)
+        }
+    }
+    
+//    function downloadfile
+    
     func DownlondFromUrl(sendDown:URL, fileName:String){
         let fileURL = sendDown
         let documentsUrl:URL =  (FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first as URL?)!
         let destinationFileUrl = documentsUrl.appendingPathComponent(fileName)
-            print("!!!__destinationFileUrl___!!!")
-            print(destinationFileUrl)
 
-//        let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
         let request = URLRequest(url:fileURL)
 
