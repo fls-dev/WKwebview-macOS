@@ -12,7 +12,6 @@
 		A8D3D24E2937A81500651886 /* crm_mcgroup_pl.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A8D3D24C2937A81500651886 /* crm_mcgroup_pl.xcdatamodeld */; };
 		A8D3D2502937A81600651886 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8D3D24F2937A81600651886 /* Assets.xcassets */; };
 		A8D3D2532937A81600651886 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A8D3D2512937A81600651886 /* Main.storyboard */; };
-		A8E6566B293B99640085DFEC /* resources in Resources */ = {isa = PBXBuildFile; fileRef = A8E6566A293B99640085DFEC /* resources */; };
 		A8E6566D293BD2150085DFEC /* JSUserScripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E6566C293BD2150085DFEC /* JSUserScripts.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,7 +24,6 @@
 		A8D3D24F2937A81600651886 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A8D3D2522937A81600651886 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A8D3D2542937A81600651886 /* crm_mcgroup_pl.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = crm_mcgroup_pl.entitlements; sourceTree = "<group>"; };
-		A8E6566A293B99640085DFEC /* resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = resources; sourceTree = "<group>"; };
 		A8E6566C293BD2150085DFEC /* JSUserScripts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSUserScripts.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -59,7 +57,6 @@
 		A8D3D2472937A81500651886 /* crm.mcgroup.pl */ = {
 			isa = PBXGroup;
 			children = (
-				A8E6566A293B99640085DFEC /* resources */,
 				A81DA1DE293A485D00438AC6 /* crm.mcgroup.plDebug.entitlements */,
 				A8D3D2482937A81500651886 /* AppDelegate.swift */,
 				A8D3D24A2937A81500651886 /* ViewController.swift */,
@@ -131,7 +128,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8D3D2502937A81600651886 /* Assets.xcassets in Resources */,
-				A8E6566B293B99640085DFEC /* resources in Resources */,
 				A8D3D2532937A81600651886 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
