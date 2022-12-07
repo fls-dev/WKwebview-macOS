@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="lLU-Xo-HVo">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="2xV-GI-IK1">
+            <objects>
+                <windowController id="lLU-Xo-HVo" customClass="WindowController" customModule="crm_mcgroup_pl" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Window" separatorStyle="shadow" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" tabbingMode="preferred" titlebarAppearsTransparent="YES" id="uRB-jm-sTC">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="268" y="340" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1120"/>
+                        <view key="contentView" id="HG4-G1-SD1">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <toolbar key="toolbar" implicitIdentifier="28808FAF-998F-4BA6-A323-76D4AA29792B" displayMode="iconAndLabel" sizeMode="regular" id="u97-DK-Et5">
+                            <allowedToolbarItems>
+                                <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="5ho-Tc-M51"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="H7b-p0-nb2"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="Jed-Pr-taI"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="w46-7L-CNu"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="5ML-xl-4JO"/>
+                                <toolbarItem implicitItemIdentifier="F1E3661C-431D-4E1D-9EBA-23398BB4BD19" label="" paletteLabel="" title="Button" sizingBehavior="auto" id="YoV-Mw-h4v">
+                                    <nil key="toolTip"/>
+                                    <imageReference key="image" image="printer" catalog="system" symbolScale="medium"/>
+                                    <button key="view" verticalHuggingPriority="750" id="oh4-wT-7hJ">
+                                        <rect key="frame" x="0.0" y="14" width="46" height="40"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" imagePosition="only" alignment="center" controlSize="large" refusesFirstResponder="YES" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oOf-cA-9ZR">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                            <imageReference key="image" image="printer" catalog="system" symbolScale="medium"/>
+                                        </buttonCell>
+                                    </button>
+                                    <connections>
+                                        <action selector="print:" target="oh4-wT-7hJ" id="lSi-tC-tdG"/>
+                                    </connections>
+                                </toolbarItem>
+                            </allowedToolbarItems>
+                            <defaultToolbarItems>
+                                <toolbarItem reference="5ML-xl-4JO"/>
+                                <toolbarItem reference="5ML-xl-4JO"/>
+                                <toolbarItem reference="YoV-Mw-h4v"/>
+                            </defaultToolbarItems>
+                        </toolbar>
+                        <connections>
+                            <outlet property="delegate" destination="lLU-Xo-HVo" id="HGH-TB-nhm"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="3oN-I4-nCm" kind="relationship" relationship="window.shadowedContentViewController" id="aYQ-dL-cEg"/>
+                    </connections>
+                </windowController>
+                <customObject id="cn3-Pb-cTb" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <userDefaultsController representsSharedInstance="YES" id="kYT-GI-Awz"/>
+            </objects>
+            <point key="canvasLocation" x="-11" y="7"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="0bR-cD-w5E">
+            <objects>
+                <viewController id="3oN-I4-nCm" customClass="ViewController" customModule="crm_mcgroup_pl" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="Iia-8E-4Vb">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="AMw-u4-1dI" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="696" y="-24"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="printer" catalog="system" width="18" height="16"/>
+    </resources>
+</document>

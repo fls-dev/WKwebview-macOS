@@ -8,50 +8,90 @@
 import Cocoa
 import WebKit
 
+@available(macOS 11.3, *)
 class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLSessionDelegate, WKDownloadDelegate {
       
     var webView: WKWebView!
     var myURL: URL!
-    var applicationNameForUserAgent: String?
     
     
-    
+    let printInfo = NSPrintInfo.shared
+  
+    override func loadView() {
+        super.loadView()
+        view = WKWebView(frame:self.view.frame)
+    }
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let webConfiguration = WKWebViewConfiguration()
         webConfiguration.websiteDataStore = WKWebsiteDataStore.default()
-
-        
         webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 1200, height: 800), configuration: webConfiguration)
         webView.allowsBackForwardNavigationGestures = true;
         webView.navigationDelegate = self
         webView.uiDelegate = self
-        
-        
+        self.printInfo.paperSize = CGSize(width: 792.0, height: 612.0)
         view = webView
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.title), options: .new, context: nil)
         
-        //        let newBut = NSButton(frame: NSRect(x: 50, y: 200, width: 100, height: 30))
-        //        newBut.title = "Autofill"
-        //        newBut.target = self
-        //        newBut.action = #selector(ViewController.printSomething)
-        //        self.view.addSubview(newBut)
+        let newBut = NSButton(frame: NSRect(x: 500, y: 0, width: 100, height: 30))
+        newBut.title = "PRINT"
+        newBut.target = self
+        newBut.action = #selector(ViewController.printSomething)
+        self.view.addSubview(newBut)
+        
+        
         myURL = URL(string: "https://crm.mcgroup.pl")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
-        
-        
     }
+//    TEST DEL
+    
+    @objc func printSomething(){
+        print("print????")
+//
+        let printInfo = NSPrintInfo.shared
+        printInfo.paperSize = NSMakeSize(595.22, 841.85)
+        printInfo.isHorizontallyCentered = true
+        printInfo.isVerticallyCentered = true
+        printInfo.orientation = .landscape
+        printInfo.topMargin = 50
+        printInfo.rightMargin = 0
+        printInfo.bottomMargin = 50
+        printInfo.leftMargin = 0
+        printInfo.verticalPagination = .automatic
+        printInfo.horizontalPagination = .fit
+        //webView.mainFrame.frameView.printOperation(with: printInfo).run()
+//
+
+        
+//        print("btn")
+        let operation = webView.printOperation(with: printInfo)
+        operation.view?.frame = webView.bounds
+
+        guard let window = webView.window else { return }
+        //        let newPrintOp = NSPrintOperation(view: webView, printInfo: self.printInfo)
+        operation.runModal(for: window, delegate: nil, didRun: nil, contextInfo: nil)
+//
+    }
+        
+    
+//    TEST DEL
+    
+    
+    
     
     
 // control target blank link
     public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        
         if navigationAction.targetFrame == nil {
             self.webView.load(navigationAction.request)
         }
         return nil
     }
+
     
 //   for open upload files
     func webView(_ webView: WKWebView, runOpenPanelWith parameters: WKOpenPanelParameters, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping ([URL]?) -> Void) {
@@ -67,6 +107,8 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
             }
         }
     }
+    
+    
 
    /*
     Download the file from the given url and store it locally in the app's temp folder.
@@ -138,6 +180,8 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
     
 //    run script Page
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        let config = WKPDFConfiguration()
+        config.rect = CGRect(x: 0, y: 0, width: 792, height: 612)
         
         let compaire = URL(string: "https://crm.mcgroup.pl/login")
         if(webView.url == compaire){
@@ -160,8 +204,8 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
                     }
                 }
         }
-        
     }
+ 
     
 //  change title WKwebView
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -174,13 +218,15 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
         if let url = webView.url {
             print(url)
         }
+       
     }
     
     override var representedObject: Any? {
         didSet {
-            // Update the view, if already loaded.
+            
         }
     }
     
     
 }
+

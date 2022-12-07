@@ -28,4 +28,13 @@ swiftSceneElm.querySelector('.login-email').value = ll;
 swiftSceneElm.querySelector('.login-password').value = pp;
 """
 
+let printScreen  = """
+document.addEventListener("DOMContentLoaded", function() {
+window.focus();
+window.print();
+})
+"""
+
+
+
 //login
