@@ -35,6 +35,9 @@ window.print();
 })
 """
 
-
+let getPrevUrl  = """
+document.referrer
+})
+"""
 
 //login
