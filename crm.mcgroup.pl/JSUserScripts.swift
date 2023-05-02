@@ -1,8 +1,8 @@
 //
 //  JSUserScripts.swift
-//  crm.mcgroup.pl
+//  MIACRM
 //
-//  Created by Pavel Misko on 3.12.22.
+//  Created by Danik on 13.12.22.
 //
 
 import Foundation
@@ -13,20 +13,25 @@ var swiftSceneElm = document.querySelector('#'+swiftIdBan+'> .HYPE_scene[style*=
 document.addEventListener('click', (e)=>{
     console.log(e.target)
     if(e.target.classList.contains('btn-login')){
-        localStorage.setItem("datalcrm", swiftSceneElm.querySelector('.login-email').value);
-        localStorage.setItem("datapcrm", swiftSceneElm.querySelector('.login-password').value);
+        localStorage.setItem("datalcrm", btoa(swiftSceneElm.querySelector('.login-email').value));
+        localStorage.setItem("datapcrm", btoa(swiftSceneElm.querySelector('.login-password').value));
     }
 })
 """
 
 let getDataL  = """
+if(localStorage.getItem('datalcrm')){
 var ll = localStorage.getItem('datalcrm');
 var pp = localStorage.getItem('datapcrm');
 var swiftIdBan = document.querySelector('.startBoxBanner').id;
 var swiftSceneElm = document.querySelector('#'+swiftIdBan+'> .HYPE_scene[style*="block"]');
-swiftSceneElm.querySelector('.login-email').value = ll;
-swiftSceneElm.querySelector('.login-password').value = pp;
+swiftSceneElm.querySelector('.login-email').value = atob(ll);
+swiftSceneElm.querySelector('.login-password').value = atob(pp);
+document.getElementById('triggerAppKey').value="macOS";
+}
 """
+<<<<<<< HEAD
+=======
 
 let printScreen  = """
 document.addEventListener("DOMContentLoaded", function() {
@@ -35,6 +40,10 @@ window.print();
 })
 """
 
-
+let getPrevUrl  = """
+document.referrer
+})
+"""
 
 //login
+>>>>>>> 410d41cc5e0ec897153e6c7aad304e3b13d90013

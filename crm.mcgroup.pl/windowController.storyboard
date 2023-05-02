@@ -40,7 +40,7 @@
                                         </buttonCell>
                                     </button>
                                     <connections>
-                                        <action selector="print:" target="oh4-wT-7hJ" id="lSi-tC-tdG"/>
+                                        <action selector="testPrint:" target="lLU-Xo-HVo" id="f5q-bH-CPJ"/>
                                     </connections>
                                 </toolbarItem>
                             </allowedToolbarItems>

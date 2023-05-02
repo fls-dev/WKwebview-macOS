@@ -7,9 +7,10 @@
 
 import Cocoa
 import WebKit
+import PDFKit
 
 @available(macOS 11.3, *)
-class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLSessionDelegate, WKDownloadDelegate {
+class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLSessionDelegate, WKDownloadDelegate, PDFViewDelegate {
       
     var webView: WKWebView!
     var myURL: URL!
@@ -28,13 +29,15 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
         let webConfiguration = WKWebViewConfiguration()
         webConfiguration.websiteDataStore = WKWebsiteDataStore.default()
         webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 1200, height: 800), configuration: webConfiguration)
+        webView.frame.size = CGSize(width: 1200, height: 800)
         webView.allowsBackForwardNavigationGestures = true;
         webView.navigationDelegate = self
         webView.uiDelegate = self
         self.printInfo.paperSize = CGSize(width: 792.0, height: 612.0)
         view = webView
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.title), options: .new, context: nil)
-        
+       
+
         let newBut = NSButton(frame: NSRect(x: 500, y: 0, width: 100, height: 30))
         newBut.title = "PRINT"
         newBut.target = self
@@ -47,35 +50,46 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
         webView.load(myRequest)
     }
 //    TEST DEL
+    func startPrinting() {
+            
+        //        pdfView.print(with: printInfo, autoRotate: true)
+        //        pdfView.print(with: printInfo, autoRotate: false)
+    }
     
     @objc func printSomething(){
         print("print????")
-//
-        let printInfo = NSPrintInfo.shared
-        printInfo.paperSize = NSMakeSize(595.22, 841.85)
-        printInfo.isHorizontallyCentered = true
-        printInfo.isVerticallyCentered = true
-        printInfo.orientation = .landscape
-        printInfo.topMargin = 50
-        printInfo.rightMargin = 0
-        printInfo.bottomMargin = 50
-        printInfo.leftMargin = 0
-        printInfo.verticalPagination = .automatic
-        printInfo.horizontalPagination = .fit
-        //webView.mainFrame.frameView.printOperation(with: printInfo).run()
-//
-
         
-//        print("btn")
-        let operation = webView.printOperation(with: printInfo)
-        operation.view?.frame = webView.bounds
+        let pdfView = PDFView()
+        let path = URL(string: "https://crm.mcgroup.pl/storage/app/public/Zus/ZUS-20221207114812.pdf")
+        let pdfDoc = PDFDocument(url: path!)
+        let wnd = NSWindow()
 
-        guard let window = webView.window else { return }
-        //        let newPrintOp = NSPrintOperation(view: webView, printInfo: self.printInfo)
-        operation.runModal(for: window, delegate: nil, didRun: nil, contextInfo: nil)
+        pdfView.autoScales = true
+        pdfView.delegate = self
+        pdfView.displayMode = .twoUp
+        pdfView.displayDirection = .horizontal
+        pdfView.document = pdfDoc
+        wnd.contentView = pdfView
+        pdfView.print(with: NSPrintInfo.shared, autoRotate: true)
+//           let printInfo = NSPrintInfo()
+//           printInfo.topMargin = 0
+//           printInfo.leftMargin = 0
+//           printInfo.bottomMargin = 0
+//           printInfo.rightMargin = 0
+//
+//        let printOperation = NSPrintOperation(view: webView, printInfo: printInfo)
+//           printOperation.run()
+    
+//        print("btn")
+//        let operation = webView.printOperation(with: printInfo)
+//        operation.view?.frame = webView.bounds
+//
+//        guard let window = webView.window else { return }
+//        //        let newPrintOp = NSPrintOperation(view: webView, printInfo: self.printInfo)
+//        operation.runModal(for: window, delegate: nil, didRun: nil, contextInfo: nil)
 //
     }
-        
+
     
 //    TEST DEL
     
@@ -95,6 +109,7 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
     
 //   for open upload files
     func webView(_ webView: WKWebView, runOpenPanelWith parameters: WKOpenPanelParameters, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping ([URL]?) -> Void) {
+        print(frame)
         let openPanel = NSOpenPanel()
         openPanel.canChooseFiles = true
         openPanel.begin { (result) in
@@ -106,6 +121,7 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
                 completionHandler(nil)
             }
         }
+       
     }
     
     
@@ -198,7 +214,7 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
                     switch result {
                     case .success(let response):
                             print("OK Run")
-                            print(response)
+                            print("response \(response)")
                     case .failure(let error):
                         print(error.localizedDescription)
                     }
@@ -217,6 +233,8 @@ class ViewController: NSViewController, WKNavigationDelegate, WKUIDelegate, URLS
         }
         if let url = webView.url {
             print(url)
+            myURL = webView.url
+            print(myURL as Any)
         }
        
     }

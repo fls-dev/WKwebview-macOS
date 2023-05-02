@@ -6,6 +6,8 @@
 //
 
 import Cocoa
+import UserNotifications
+
 
 var count = 0
 
@@ -26,8 +28,6 @@ class WindowController: NSWindowController {
         super.windowDidLoad()
         count += 1
         self.window!.title = "MIACRM #\(count)"
-        
-        
     }
 
     weak var tabDelegate: TabDelegate?
@@ -51,11 +51,37 @@ class WindowController: NSWindowController {
             print("- ", window, window.title, "isKey =", window.isKeyWindow, ", isMain =", window.isMainWindow, " at ", window.frame)
         }
     }
+    static let TestMessageNotification = "com.test.TestMessageNotification"
     
-    
-    @IBAction func brtnPrinting(_ sender: Any) {
+    @IBAction func testPrint(_ sender: Any) {
         print("PRINT BTN PRINT")
-        ViewController().printSomething()
+        
+        let center = UNUserNotificationCenter.current()
+
+            center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+                if granted {
+                    print("Yay!")
+                } else {
+                    print("D'oh")
+                }
+            }
+
+           let content = UNMutableNotificationContent()
+           content.title = "Late wake up call"
+           content.body = "The early bird catches the worm, but the second mouse gets the cheese."
+           content.categoryIdentifier = "alarm"
+           content.userInfo = ["customData": "fizzbuzz"]
+           content.sound = UNNotificationSound.default
+
+           var dateComponents = DateComponents()
+           
+           let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+
+           let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+           center.add(request)
+              
     }
-    
+}
+class LocalNotificationManager {
+    var notifications = [Notification]()
 }
